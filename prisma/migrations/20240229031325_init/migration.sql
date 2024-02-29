@@ -1,0 +1,5 @@
+-- DropForeignKey
+ALTER TABLE `BOM` DROP FOREIGN KEY `BOM_partId_fkey`;
+
+-- AddForeignKey
+ALTER TABLE `BOM` ADD CONSTRAINT `BOM_partId_fkey` FOREIGN KEY (`partId`) REFERENCES `Part`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

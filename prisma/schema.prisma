@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Material {
+  id         String   @id @default(uuid())
+  partType   String
+  partNumber String
+  partName   String
+  supplier   String
+  createdAt  DateTime @default(now())
+  BOM        BOM[]
+}
+
+model Part {
+  id          String   @id @default(uuid())
+  partProject String
+  partNumber  String
+  partName    String
+  supplier    String
+  createdAt   DateTime @default(now())
+  BOM         BOM[]
+}
+
+model BOM {
+  id            String   @id @default(uuid())
+  part          Part     @relation(fields: [partId], references: [id], onDelete: Cascade)
+  partId        String
+  material      Material @relation(fields: [materialId], references: [id], onDelete: Restrict)
+  materialId    String
+  quantity      Int
+  unitOfMeasure String
+  createdAt     DateTime @default(now())
+
+  @@index([partId], name: "idx_partId")
+}
